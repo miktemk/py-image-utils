@@ -1,0 +1,1 @@
+Too bad the alpha composition does not work in PIL when resizing semitransparent pngs
