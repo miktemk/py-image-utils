@@ -4,7 +4,7 @@
 import sys, os, re
 import time, datetime
 import getopt
-import Image
+from PIL import Image
 
 OUT_DIR = "decomposed"
 
@@ -12,18 +12,18 @@ filenameIndexOut = 0
 
 def doCroppings(imgPath, foldername_out, cropWidth, cropHeight):
 	global filenameIndexOut
-	print imgPath
+	print (imgPath)
 	im = Image.open(imgPath)
 	src_width, src_height = im.size
-	print src_width, src_height
+	print (src_width, src_height)
 	cropC = src_width / cropWidth
 	cropR = src_height / cropHeight
-	for r in range(cropR):
-		for c in range(cropC):
+	for r in range(int(cropR)):
+		for c in range(int(cropC)):
 			x = c * cropWidth
 			y = r * cropHeight
 			outfile = foldername_out + "/crop_" + str(filenameIndexOut).zfill(3) + ".png"
-			print outfile, x, y, cropWidth, cropHeight
+			print (outfile, x, y, cropWidth, cropHeight)
 			filenameIndexOut += 1
 			cropping = im.crop((x, y, x + cropWidth, y + cropHeight))
 			cropping.save(outfile, "PNG")
@@ -39,7 +39,8 @@ for opt,arg in optlist:
 		opt_h = int(arg)
 
 if len(args) == 0:
-	print "Please specify the folder of images as the arg"
+	print ("Please specify the folder of images as the arg")
+	sys.exit(1)
 
 foldername = args[0]
 foldername_out = foldername + "/" + OUT_DIR
@@ -50,6 +51,7 @@ if not os.path.exists(foldername_out):
 
 # do em!
 dirList = os.listdir(foldername)
+dirList.sort()
 for fname in dirList:
 	fullPath = foldername + "\\" + fname
 	if not os.path.isdir(fullPath):

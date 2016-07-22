@@ -9,31 +9,16 @@ from PIL import Image
 
 OUT_DIR = "convert"
 
-def resizeImage(fileSrc, fileDest, divideFactor):
+def convertImage(fileSrc, fileDest):
 	format = ""
-	fileName, fileExtension = os.path.splitext(fileSrc)
-	fileExtension = fileExtension.lower()
-	if fileExtension == ".jpg" or fileExtension == ".jpeg":
-		format = "JPEG"
-	if fileExtension == ".png":
-		format = "PNG"
-	elif fileExtension == ".gif":
-		format = "GIF"
-	if format == "":
-		return
+	fileNameDest, fileExtension = os.path.splitext(fileDest)
+	format = "JPEG"
 	im = Image.open(fileSrc)
-	width, height = im.size
-	im.thumbnail((int(width/divideFactor), int(height/divideFactor)), Image.ANTIALIAS)
-	im.save(fileDest, format)
+	im.save(fileNameDest + ".jpg", format)
 
 # command line options: note the first line parameter and the if statements below
-opt_f = 4
 optlist, args = getopt.getopt(sys.argv[1:], "f:")
-for opt,arg in optlist:
-	if opt == "-f":
-		opt_f = int(arg)
 dirname = args[0]
-print ("scaling by factor of", opt_f)
 
 #output dir
 outdir = dirname + "/" + OUT_DIR
@@ -48,6 +33,6 @@ for fname in dirList:
 	if os.path.isdir(fullPath):
 		continue
 	print ("file", fullPath)
-	resizeImage(fullPath, fullPathDest, opt_f)
+	convertImage(fullPath, fullPathDest)
 
 
